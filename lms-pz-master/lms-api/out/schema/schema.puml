@@ -1,0 +1,202 @@
+plantuml_diagram = """
+@startuml lms-db
+!define table(x) class x << (T,#FFAAAA) >>
+!define primary_key(x) <u>x</u>
+!define foreign_key(x) #x
+
+' Tables
+table(flagi) {
+    + primary_key(id_flagi)
+    ..
+    kod
+}
+
+table(forum_odp) {
+    + primary_key(id_odp)
+    ..
+    foreign_key(id_wpis)
+    foreign_key(id_uzytk)
+    tresc
+    data_wpis
+}
+
+table(forum_wpisy) {
+    + primary_key(id_wpis)
+    ..
+    foreign_key(id_przedm)
+    foreign_key(id_uzytk)
+    temat
+    tresc
+    data_wpis
+}
+
+table(materialy) {
+    + primary_key(id_mater)
+    ..
+    foreign_key(id_przedm)
+    data_wstaw
+    lp
+    temat
+    plik
+    nazwa_pliku
+    ext
+    opis
+    widocznosc
+    foreign_key(id_zadania)
+}
+
+table(odpowiedzi_zadania) {
+    + primary_key(id_odpowiedzi)
+    ..
+    foreign_key(id_zadania)
+    foreign_key(id_ucznia)
+    tresc
+    koment
+    ocena
+    data_wstaw
+    data_oceny
+}
+
+table(okresy) {
+    + primary_key(id_okresu)
+    ..
+    kod
+    data_pocz
+    data_konc
+}
+
+table(powiadomienia) {
+    + primary_key(id_powiadom)
+    ..
+    foreign_key(id_odbiorcy)
+    data_wstaw
+    tresc
+    foreign_key(id_flagi)
+}
+
+table(przedmioty) {
+    + primary_key(id_przedm)
+    ..
+    kod
+    nazwa
+    foreign_key(id_prow)
+    limit_miejsc
+    opis
+    war_zalicz
+    foreign_key(id_okresu)
+    foreign_key(id_status)
+    rejestr_uczn
+}
+
+table(przedmiot_status) {
+    + primary_key(id_status)
+    ..
+    kod
+    nazwa
+}
+
+table(raport) {
+    + primary_key(id_raportu)
+    ..
+    foreign_key(id_uzytk)
+    nazwa
+    data_wystaw
+    raport
+    foreign_key(id_przedm)
+}
+
+table(role) {
+    + primary_key(id_roli)
+    ..
+    nazwa
+}
+
+table(typy_zadan) {
+    + primary_key(id_typu)
+    ..
+    nazwa
+}
+
+table(uczen_przedmiot) {
+    + primary_key(id_encji)
+    ..
+    foreign_key(id_przedm)
+    foreign_key(id_ucznia)
+    ocena
+    data_wystaw_oc
+}
+
+table(uzytkownicy) {
+    + primary_key(id_uzytk)
+    ..
+    imie
+    nazwisko
+    tyt_nauk
+    login
+    haslo
+    email
+    telefon
+    data_urodz
+    status
+    foreign_key(id_zdjecia)
+    foreign_key(id_roli)
+}
+
+table(wiadomosci_prywatne) {
+    + primary_key(id_wiadomosci)
+    ..
+    foreign_key(id_nadawcy)
+    foreign_key(id_odbiorcy)
+    tresc
+    data_wyslania
+    foreign_key(id_flagi)
+}
+
+table(zadania) {
+    + primary_key(id_zadania)
+    ..
+    foreign_key(id_przedm)
+    opis
+    data_wstaw
+    data_pocz
+    data_konc
+    tresc
+    foreign_key(id_typu)
+}
+
+table(zdjecia) {
+    + primary_key(id_zdjecia)
+    ..
+    zdjecie
+    ext
+    data_wstaw
+}
+
+' Relationships
+forum_odp }o--|| forum_wpisy : id_wpis
+forum_odp }o--|| uzytkownicy : id_uzytk
+forum_wpisy }o--|| przedmioty : id_przedm
+forum_wpisy }o--|| uzytkownicy : id_uzytk
+materialy }o--|| przedmioty : id_przedm
+materialy ||--|| zadania : id_zadania
+odpowiedzi_zadania }o--|| zadania : id_zadania
+odpowiedzi_zadania }o--|| uzytkownicy : id_ucznia
+powiadomienia }o--|{ uzytkownicy : id_odbiorcy
+powiadomienia }o--|| flagi : id_flagi
+przedmioty }o--|| okresy : id_okresu
+przedmioty }o--|| przedmiot_status : id_status
+przedmioty }o--o{ uzytkownicy : id_prow
+raport }o--|| uzytkownicy : id_uzytk
+raport }o--|| przedmioty : id_przedm
+uzytkownicy }o--|| role : id_roli
+uzytkownicy }|--|| zdjecia : id_zdjecia
+wiadomosci_prywatne --> uzytkownicy : id_nadawcy
+wiadomosci_prywatne --> uzytkownicy : id_odbiorcy
+wiadomosci_prywatne --> flagi : id_flagi
+zadania }o--|| przedmioty : id_przedm
+zadania }|--|| typy_zadan : id_typu
+uczen_przedmiot }|--|| przedmioty : id_przedm
+uczen_przedmiot }|--|| uzytkownicy : id_ucznia
+
+@enduml
+"""

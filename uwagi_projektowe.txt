@@ -1,0 +1,3 @@
+Licencja na serwer baz danych aktualnie wygasła, z tego powodu nie ma możliwości uruchomienia aplikacji, jedyna możliwość jest podejrzenia kodu oraz całej dokumentacji wraz z zrzutami ekranu które prezentują wygląd systemu.
+
+Jeżeli będzie potrzeba mogę dokupić licencję, aby pokazać działanie programu

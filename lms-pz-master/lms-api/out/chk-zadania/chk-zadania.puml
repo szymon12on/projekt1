@@ -1,0 +1,19 @@
+@startuml chk-zadania
+actor Uzytkownik as user
+boundary OdpowiedziController as controller
+database ZadanieDataSet as zadanieDS
+entity ZadanieUtils as utils
+database UzytkownikRepository as repo
+
+user -> controller : POST /odpowiedz (Odpowiedz)
+controller -> zadanieDS : Pobierz zadanie
+zadanieDS --> controller : Zadanie
+controller -> utils : sprawdzZadaniaZamkniete(zadanie, odpowiedź)
+loop Dla każdej odpowiedzi
+    utils -> utils : Oblicz punkty
+end
+utils --> controller : Lista przetworzonych odpowiedzi
+controller -> repo : Zapisz odpowiedź
+repo --> controller : Numer id odpowiedzi
+controller --> user : ResponseEntity (link do odpowiedzi)
+@enduml

@@ -1,0 +1,24 @@
+@startuml login-jwt
+actor Uzytkownik as user
+boundary AuthController as controller
+entity AuthenticationManager as authManager
+entity JwtService as jwtService
+database UzytkownikRepository as repo
+
+user -> controller : POST /login (LoginRequest)
+controller -> authManager : authenticate(login, hasło)
+authManager -> repo : Sprawdź dane użytkownika
+
+alt Dane są poprawne
+    repo --> authManager : Dane użytkownika
+    authManager --> controller : Authentication
+    controller -> jwtService : createToken(Uzytkownik)
+    jwtService -> jwtService : Ustaw Claims i utwórz token
+    jwtService --> controller : JWT token
+    controller --> user : LoginResponse (JWT token)
+else Dane są niepoprawne
+    repo --> authManager : Wyjątek: NoSuchElementException
+    authManager --> controller : Wyjątek: AuthenticationException
+    controller --> user : ResponseEntity (Status 404, Błąd)
+end
+@enduml
